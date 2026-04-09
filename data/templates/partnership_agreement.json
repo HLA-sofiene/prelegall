@@ -1,0 +1,84 @@
+{
+  "id": "partnership_agreement",
+  "name": "Business Partnership Agreement",
+  "category": "business",
+  "description": "A legal agreement establishing a business partnership, defining the roles, contributions, profit sharing, and responsibilities of each partner.",
+  "version": "1.0",
+  "variables": [
+    { "key": "partner_1_name", "label": "Partner 1 Full Name", "type": "text", "required": true },
+    { "key": "partner_1_address", "label": "Partner 1 Address", "type": "text", "required": true },
+    { "key": "partner_2_name", "label": "Partner 2 Full Name", "type": "text", "required": true },
+    { "key": "partner_2_address", "label": "Partner 2 Address", "type": "text", "required": true },
+    { "key": "business_name", "label": "Partnership / Business Name", "type": "text", "required": true },
+    { "key": "business_address", "label": "Principal Place of Business", "type": "text", "required": true },
+    { "key": "business_purpose", "label": "Business Purpose / Description", "type": "textarea", "required": true },
+    { "key": "effective_date", "label": "Effective Date", "type": "date", "required": true },
+    { "key": "partner_1_contribution", "label": "Partner 1 Capital Contribution", "type": "text", "required": true },
+    { "key": "partner_2_contribution", "label": "Partner 2 Capital Contribution", "type": "text", "required": true },
+    { "key": "partner_1_profit_share", "label": "Partner 1 Profit/Loss Share (%)", "type": "number", "required": true, "default": 50 },
+    { "key": "partner_2_profit_share", "label": "Partner 2 Profit/Loss Share (%)", "type": "number", "required": true, "default": 50 },
+    { "key": "governing_law", "label": "Governing Law (State/Country)", "type": "text", "required": true }
+  ],
+  "sections": [
+    {
+      "id": "formation",
+      "title": "1. Formation",
+      "content": "This Business Partnership Agreement (\"Agreement\") is entered into as of {{effective_date}} between {{partner_1_name}}, residing at {{partner_1_address}} (\"Partner 1\"), and {{partner_2_name}}, residing at {{partner_2_address}} (\"Partner 2\"), collectively referred to as the \"Partners\"."
+    },
+    {
+      "id": "business",
+      "title": "2. Business Name and Purpose",
+      "content": "The Partners agree to conduct business under the name {{business_name}}, with its principal place of business at {{business_address}}. The purpose of the partnership is: {{business_purpose}}."
+    },
+    {
+      "id": "contributions",
+      "title": "3. Capital Contributions",
+      "content": "Each Partner shall contribute to the capital of the partnership as follows:\n- Partner 1 ({{partner_1_name}}): {{partner_1_contribution}}\n- Partner 2 ({{partner_2_name}}): {{partner_2_contribution}}\n\nAdditional capital contributions may be required by mutual written agreement."
+    },
+    {
+      "id": "profit_loss",
+      "title": "4. Profit and Loss Sharing",
+      "content": "The net profits and losses of the partnership shall be allocated as follows:\n- Partner 1 ({{partner_1_name}}): {{partner_1_profit_share}}%\n- Partner 2 ({{partner_2_name}}): {{partner_2_profit_share}}%\n\nDistributions shall be made at such times and in such amounts as the Partners shall agree in writing."
+    },
+    {
+      "id": "management",
+      "title": "5. Management and Decision Making",
+      "content": "All major business decisions, including capital expenditures above an agreed threshold, entering into contracts, and taking on debt, shall require the unanimous written consent of all Partners. Day-to-day operational decisions may be made by either Partner acting alone."
+    },
+    {
+      "id": "banking",
+      "title": "6. Banking and Accounting",
+      "content": "The partnership shall maintain a dedicated business bank account in the partnership's name. All partnership funds shall be deposited in this account. Proper books of account shall be maintained and each Partner shall have access to review them at any time."
+    },
+    {
+      "id": "duties",
+      "title": "7. Partner Duties",
+      "content": "Each Partner shall: (a) devote their best efforts to the partnership's business; (b) act in good faith toward the other Partners; (c) not engage in activities that conflict with the partnership's interests without prior written consent of all Partners."
+    },
+    {
+      "id": "transfer",
+      "title": "8. Transfer of Partnership Interest",
+      "content": "No Partner may transfer, assign, or encumber their partnership interest without the prior written consent of all other Partners. Any attempted transfer in violation of this provision shall be null and void."
+    },
+    {
+      "id": "dissolution",
+      "title": "9. Dissolution",
+      "content": "The partnership may be dissolved by: (a) unanimous written agreement of all Partners; (b) the death, incapacity, or bankruptcy of a Partner; (c) a court order. Upon dissolution, the partnership's assets shall be liquidated, liabilities settled, and remaining proceeds distributed in accordance with each Partner's profit share percentage."
+    },
+    {
+      "id": "dispute_resolution",
+      "title": "10. Dispute Resolution",
+      "content": "Any dispute arising out of or relating to this Agreement shall first be subject to good-faith negotiation between the Partners. If unresolved within 30 days, the dispute shall be submitted to mediation, and if still unresolved, to binding arbitration in accordance with the rules of the applicable arbitration body."
+    },
+    {
+      "id": "governing_law",
+      "title": "11. Governing Law",
+      "content": "This Agreement shall be governed by and construed in accordance with the laws of {{governing_law}}."
+    },
+    {
+      "id": "signatures",
+      "title": "Signatures",
+      "content": "IN WITNESS WHEREOF, the parties have executed this Partnership Agreement as of the date first written above.\n\n{{partner_1_name}} (Partner 1)\nSignature: _______________________\nDate: ____________________________\n\n{{partner_2_name}} (Partner 2)\nSignature: _______________________\nDate: ____________________________"
+    }
+  ]
+}

@@ -1,0 +1,90 @@
+{
+  "id": "lease_agreement",
+  "name": "Residential Lease Agreement",
+  "category": "real_estate",
+  "description": "A standard rental agreement between a landlord and tenant for a residential property.",
+  "version": "1.0",
+  "variables": [
+    { "key": "landlord_name", "label": "Landlord Full Name", "type": "text", "required": true },
+    { "key": "landlord_address", "label": "Landlord Address", "type": "text", "required": true },
+    { "key": "tenant_name", "label": "Tenant Full Name(s)", "type": "text", "required": true },
+    { "key": "property_address", "label": "Rental Property Address", "type": "text", "required": true },
+    { "key": "lease_start_date", "label": "Lease Start Date", "type": "date", "required": true },
+    { "key": "lease_end_date", "label": "Lease End Date", "type": "date", "required": true },
+    { "key": "monthly_rent", "label": "Monthly Rent (amount and currency)", "type": "text", "required": true },
+    { "key": "rent_due_day", "label": "Rent Due Day of Month", "type": "number", "required": true, "default": 1 },
+    { "key": "security_deposit", "label": "Security Deposit Amount", "type": "text", "required": true },
+    { "key": "late_fee", "label": "Late Payment Fee", "type": "text", "required": false },
+    { "key": "pets_allowed", "label": "Pets Allowed (Yes/No/With conditions)", "type": "text", "required": true, "default": "No" },
+    { "key": "utilities", "label": "Utilities Included (e.g. None, Water, All)", "type": "text", "required": true },
+    { "key": "notice_period_days", "label": "Notice Period (days) for Termination", "type": "number", "required": true, "default": 30 },
+    { "key": "governing_law", "label": "Governing Law (State/Country)", "type": "text", "required": true }
+  ],
+  "sections": [
+    {
+      "id": "parties",
+      "title": "1. Parties",
+      "content": "This Residential Lease Agreement (\"Agreement\") is entered into between {{landlord_name}}, located at {{landlord_address}} (the \"Landlord\"), and {{tenant_name}} (the \"Tenant\")."
+    },
+    {
+      "id": "property",
+      "title": "2. Property",
+      "content": "The Landlord agrees to lease to the Tenant the residential property located at {{property_address}} (the \"Property\") for the period beginning {{lease_start_date}} and ending {{lease_end_date}}."
+    },
+    {
+      "id": "rent",
+      "title": "3. Rent",
+      "content": "The Tenant agrees to pay a monthly rent of {{monthly_rent}}, due on the {{rent_due_day}}st/th day of each month. Rent shall be paid by bank transfer, cheque, or such other method as agreed by the Landlord. A late payment fee of {{late_fee}} shall apply to payments received more than 5 days after the due date."
+    },
+    {
+      "id": "deposit",
+      "title": "4. Security Deposit",
+      "content": "The Tenant shall pay a security deposit of {{security_deposit}} prior to taking occupancy. The deposit shall be held by the Landlord as security against damage to the Property beyond normal wear and tear, unpaid rent, or other breaches of this Agreement. The deposit shall be returned within 30 days of the end of the tenancy, less any legitimate deductions."
+    },
+    {
+      "id": "utilities",
+      "title": "5. Utilities",
+      "content": "The following utilities are included in the rent: {{utilities}}. The Tenant is responsible for all other utilities and services not specified herein."
+    },
+    {
+      "id": "use",
+      "title": "6. Use of Property",
+      "content": "The Property shall be used solely as a private residential dwelling for the Tenant and approved occupants. The Tenant shall not sublease the Property or any part thereof without the prior written consent of the Landlord."
+    },
+    {
+      "id": "pets",
+      "title": "7. Pets",
+      "content": "Pets are permitted as follows: {{pets_allowed}}. Any breach of this clause may result in termination of the tenancy."
+    },
+    {
+      "id": "maintenance",
+      "title": "8. Maintenance and Repairs",
+      "content": "The Tenant agrees to: (a) maintain the Property in a clean and sanitary condition; (b) promptly report any damage or required repairs to the Landlord; (c) be responsible for minor maintenance and repairs not exceeding an agreed threshold. The Landlord shall be responsible for structural repairs and maintaining the Property in a habitable condition."
+    },
+    {
+      "id": "alterations",
+      "title": "9. Alterations",
+      "content": "The Tenant shall not make any alterations, additions, or improvements to the Property without the prior written consent of the Landlord. Any approved alterations shall, unless otherwise agreed, become part of the Property at the end of the tenancy."
+    },
+    {
+      "id": "termination",
+      "title": "10. Termination",
+      "content": "Either party may terminate this Agreement at the end of the lease term by providing {{notice_period_days}} days' written notice. Early termination by the Tenant without cause may result in forfeiture of the security deposit and liability for rent until a replacement tenant is found."
+    },
+    {
+      "id": "entry",
+      "title": "11. Right of Entry",
+      "content": "The Landlord shall have the right to enter the Property with at least 24 hours' written notice for the purpose of inspection, repairs, or showing the Property to prospective tenants. In case of emergency, no prior notice is required."
+    },
+    {
+      "id": "governing_law",
+      "title": "12. Governing Law",
+      "content": "This Agreement shall be governed by and construed in accordance with the laws of {{governing_law}}."
+    },
+    {
+      "id": "signatures",
+      "title": "Signatures",
+      "content": "Both parties agree to the terms and conditions set out in this Residential Lease Agreement.\n\n{{landlord_name}} (Landlord)\nSignature: _______________________\nDate: ____________________________\n\n{{tenant_name}} (Tenant)\nSignature: _______________________\nDate: ____________________________"
+    }
+  ]
+}

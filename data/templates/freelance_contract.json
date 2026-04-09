@@ -1,0 +1,82 @@
+{
+  "id": "freelance_contract",
+  "name": "Freelance / Independent Contractor Agreement",
+  "category": "services",
+  "description": "A contract for engaging a freelancer or independent contractor for a specific project or ongoing work.",
+  "version": "1.0",
+  "variables": [
+    { "key": "contractor_name", "label": "Contractor Full Name", "type": "text", "required": true },
+    { "key": "contractor_address", "label": "Contractor Address", "type": "text", "required": true },
+    { "key": "client_name", "label": "Client / Company Name", "type": "text", "required": true },
+    { "key": "client_address", "label": "Client Address", "type": "text", "required": true },
+    { "key": "effective_date", "label": "Effective Date", "type": "date", "required": true },
+    { "key": "project_description", "label": "Project / Work Description", "type": "textarea", "required": true },
+    { "key": "hourly_rate", "label": "Hourly Rate or Fixed Fee", "type": "text", "required": true },
+    { "key": "payment_terms", "label": "Payment Terms", "type": "text", "required": true, "default": "Net 30 days from invoice date" },
+    { "key": "project_duration", "label": "Project Duration / Deadline", "type": "text", "required": true },
+    { "key": "non_compete_months", "label": "Non-Compete Period (months, 0 to disable)", "type": "number", "required": false, "default": 6 },
+    { "key": "governing_law", "label": "Governing Law (State/Country)", "type": "text", "required": true }
+  ],
+  "sections": [
+    {
+      "id": "parties",
+      "title": "1. Parties",
+      "content": "This Freelance / Independent Contractor Agreement (\"Agreement\") is entered into as of {{effective_date}} between {{contractor_name}}, residing at {{contractor_address}} (the \"Contractor\"), and {{client_name}}, located at {{client_address}} (the \"Client\")."
+    },
+    {
+      "id": "scope",
+      "title": "2. Scope of Work",
+      "content": "The Contractor agrees to perform the following work for the Client (the \"Project\"):\n\n{{project_description}}\n\nThe Project shall be completed by {{project_duration}}. Any changes to the scope of work must be agreed upon in writing by both parties."
+    },
+    {
+      "id": "compensation",
+      "title": "3. Compensation",
+      "content": "The Client agrees to compensate the Contractor at the rate of {{hourly_rate}}. Payment shall be made on the following terms: {{payment_terms}}. The Contractor shall submit invoices describing work performed. Late payments shall accrue interest at 1.5% per month."
+    },
+    {
+      "id": "expenses",
+      "title": "4. Expenses",
+      "content": "The Client shall reimburse the Contractor for all pre-approved, reasonable expenses incurred in the performance of services under this Agreement. The Contractor shall provide receipts for all expenses claimed."
+    },
+    {
+      "id": "independent_contractor",
+      "title": "5. Independent Contractor Status",
+      "content": "The Contractor is an independent contractor and not an employee of the Client. The Contractor is responsible for all taxes, self-employment contributions, and insurance. The Contractor shall not be entitled to any employee benefits, including health insurance, paid leave, or pension contributions."
+    },
+    {
+      "id": "ip",
+      "title": "6. Intellectual Property",
+      "content": "All work product, code, designs, content, and other deliverables created by the Contractor specifically for the Client under this Agreement shall, upon full payment, become the exclusive property of the Client. The Contractor retains ownership of all pre-existing tools, libraries, and frameworks used in delivering the work."
+    },
+    {
+      "id": "confidentiality",
+      "title": "7. Confidentiality",
+      "content": "The Contractor agrees to keep all Client information, data, and business details confidential during and after the term of this Agreement. The Contractor shall not disclose such information to any third party without the prior written consent of the Client."
+    },
+    {
+      "id": "non_compete",
+      "title": "8. Non-Compete",
+      "content": "For a period of {{non_compete_months}} months following the termination of this Agreement, the Contractor agrees not to directly solicit or engage in work with the Client's direct competitors in substantially the same capacity as performed under this Agreement."
+    },
+    {
+      "id": "termination",
+      "title": "9. Termination",
+      "content": "Either party may terminate this Agreement with 7 days' written notice. Upon termination, the Client shall pay for all work satisfactorily completed up to the termination date. The Contractor shall deliver all work in progress to the Client upon termination."
+    },
+    {
+      "id": "limitation_of_liability",
+      "title": "10. Limitation of Liability",
+      "content": "The Contractor's total liability to the Client shall not exceed the total fees paid in the 3 months preceding the claim. Neither party shall be liable for indirect, consequential, or punitive damages."
+    },
+    {
+      "id": "governing_law",
+      "title": "11. Governing Law",
+      "content": "This Agreement shall be governed by and construed in accordance with the laws of {{governing_law}}."
+    },
+    {
+      "id": "signatures",
+      "title": "Signatures",
+      "content": "IN WITNESS WHEREOF, the parties have executed this Agreement as of the date first written above.\n\n{{contractor_name}} (Contractor)\nSignature: _______________________\nDate: ____________________________\n\n{{client_name}} (Client)\nSignature: _______________________\nName: ___________________________\nTitle: ___________________________\nDate: ____________________________"
+    }
+  ]
+}
