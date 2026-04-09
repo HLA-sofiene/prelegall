@@ -1,0 +1,88 @@
+{
+  "id": "service_agreement",
+  "name": "Service Agreement",
+  "category": "services",
+  "description": "A contract between a service provider and a client defining the scope, payment, and terms of services to be rendered.",
+  "version": "1.0",
+  "variables": [
+    { "key": "provider_name", "label": "Service Provider Name", "type": "text", "required": true },
+    { "key": "provider_address", "label": "Service Provider Address", "type": "text", "required": true },
+    { "key": "client_name", "label": "Client Name", "type": "text", "required": true },
+    { "key": "client_address", "label": "Client Address", "type": "text", "required": true },
+    { "key": "effective_date", "label": "Effective Date", "type": "date", "required": true },
+    { "key": "services_description", "label": "Description of Services", "type": "textarea", "required": true },
+    { "key": "deliverables", "label": "Deliverables", "type": "textarea", "required": false },
+    { "key": "fee", "label": "Total Fee / Rate (amount and currency)", "type": "text", "required": true },
+    { "key": "payment_schedule", "label": "Payment Schedule", "type": "text", "required": true, "default": "50% upon signing, 50% upon completion" },
+    { "key": "start_date", "label": "Service Start Date", "type": "date", "required": true },
+    { "key": "end_date", "label": "Service End Date / Duration", "type": "text", "required": true },
+    { "key": "governing_law", "label": "Governing Law (State/Country)", "type": "text", "required": true }
+  ],
+  "sections": [
+    {
+      "id": "parties",
+      "title": "1. Parties",
+      "content": "This Service Agreement (\"Agreement\") is entered into as of {{effective_date}} between {{provider_name}}, located at {{provider_address}} (the \"Service Provider\"), and {{client_name}}, located at {{client_address}} (the \"Client\")."
+    },
+    {
+      "id": "services",
+      "title": "2. Services",
+      "content": "The Service Provider agrees to provide the following services to the Client (the \"Services\"):\n\n{{services_description}}\n\nThe Services shall commence on {{start_date}} and shall continue until {{end_date}}, unless terminated earlier in accordance with this Agreement."
+    },
+    {
+      "id": "deliverables",
+      "title": "3. Deliverables",
+      "content": "The Service Provider shall deliver the following deliverables as part of the Services:\n\n{{deliverables}}\n\nDeliverables shall be provided in the format and by the deadlines mutually agreed upon in writing by both parties."
+    },
+    {
+      "id": "compensation",
+      "title": "4. Compensation",
+      "content": "In consideration for the Services, the Client agrees to pay the Service Provider {{fee}}. Payment shall be made according to the following schedule: {{payment_schedule}}. Invoices are due within 30 days of receipt unless otherwise agreed in writing."
+    },
+    {
+      "id": "late_payment",
+      "title": "5. Late Payment",
+      "content": "If any payment is not received by the due date, the Service Provider reserves the right to charge interest at a rate of 1.5% per month on the outstanding amount, or the maximum rate permitted by law, whichever is lower."
+    },
+    {
+      "id": "independent_contractor",
+      "title": "6. Independent Contractor",
+      "content": "The Service Provider is an independent contractor and not an employee, agent, or partner of the Client. The Service Provider is solely responsible for all taxes, insurance, and other obligations arising from their status as an independent contractor."
+    },
+    {
+      "id": "confidentiality",
+      "title": "7. Confidentiality",
+      "content": "Each party agrees to keep confidential all non-public information received from the other party in connection with this Agreement and to use such information solely for the purpose of performing obligations under this Agreement."
+    },
+    {
+      "id": "ip",
+      "title": "8. Intellectual Property",
+      "content": "Upon receipt of full payment, the Service Provider assigns to the Client all rights, title, and interest in the deliverables specifically created for the Client under this Agreement. The Service Provider retains all rights to pre-existing tools, methodologies, and intellectual property used in performing the Services."
+    },
+    {
+      "id": "warranties",
+      "title": "9. Warranties",
+      "content": "The Service Provider warrants that: (a) it has the right to enter into this Agreement; (b) the Services will be performed in a professional and workmanlike manner; (c) the deliverables will not infringe any third-party intellectual property rights."
+    },
+    {
+      "id": "limitation_of_liability",
+      "title": "10. Limitation of Liability",
+      "content": "In no event shall either party be liable to the other for any indirect, incidental, consequential, special, or exemplary damages arising out of or related to this Agreement. The Service Provider's total liability shall not exceed the total fees paid under this Agreement."
+    },
+    {
+      "id": "termination",
+      "title": "11. Termination",
+      "content": "Either party may terminate this Agreement with 14 days' written notice. In the event of termination, the Client shall pay the Service Provider for all Services rendered up to the date of termination. The Service Provider shall deliver all completed work product to the Client upon termination."
+    },
+    {
+      "id": "governing_law",
+      "title": "12. Governing Law",
+      "content": "This Agreement shall be governed by and construed in accordance with the laws of {{governing_law}}."
+    },
+    {
+      "id": "signatures",
+      "title": "Signatures",
+      "content": "IN WITNESS WHEREOF, the parties have executed this Service Agreement as of the date first written above.\n\n{{provider_name}} (Service Provider)\nSignature: _______________________\nName: ___________________________\nTitle: ___________________________\nDate: ____________________________\n\n{{client_name}} (Client)\nSignature: _______________________\nName: ___________________________\nTitle: ___________________________\nDate: ____________________________"
+    }
+  ]
+}

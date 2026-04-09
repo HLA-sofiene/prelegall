@@ -1,0 +1,79 @@
+{
+  "id": "sales_contract",
+  "name": "Sales Contract / Purchase Agreement",
+  "category": "commercial",
+  "description": "A contract governing the sale and purchase of goods between a seller and a buyer.",
+  "version": "1.0",
+  "variables": [
+    { "key": "seller_name", "label": "Seller Full Name / Company", "type": "text", "required": true },
+    { "key": "seller_address", "label": "Seller Address", "type": "text", "required": true },
+    { "key": "buyer_name", "label": "Buyer Full Name / Company", "type": "text", "required": true },
+    { "key": "buyer_address", "label": "Buyer Address", "type": "text", "required": true },
+    { "key": "effective_date", "label": "Agreement Date", "type": "date", "required": true },
+    { "key": "goods_description", "label": "Description of Goods", "type": "textarea", "required": true },
+    { "key": "quantity", "label": "Quantity", "type": "text", "required": true },
+    { "key": "purchase_price", "label": "Purchase Price (amount and currency)", "type": "text", "required": true },
+    { "key": "payment_method", "label": "Payment Method", "type": "text", "required": true, "default": "Bank transfer" },
+    { "key": "payment_due_date", "label": "Payment Due Date", "type": "date", "required": true },
+    { "key": "delivery_date", "label": "Delivery Date / Period", "type": "text", "required": true },
+    { "key": "delivery_location", "label": "Delivery Location", "type": "text", "required": true },
+    { "key": "governing_law", "label": "Governing Law (State/Country)", "type": "text", "required": true }
+  ],
+  "sections": [
+    {
+      "id": "parties",
+      "title": "1. Parties",
+      "content": "This Sales Contract (\"Agreement\") is entered into as of {{effective_date}} between {{seller_name}}, located at {{seller_address}} (the \"Seller\"), and {{buyer_name}}, located at {{buyer_address}} (the \"Buyer\")."
+    },
+    {
+      "id": "goods",
+      "title": "2. Description of Goods",
+      "content": "The Seller agrees to sell and the Buyer agrees to purchase the following goods (the \"Goods\"):\n\nDescription: {{goods_description}}\nQuantity: {{quantity}}\n\nThe Goods shall conform to any specifications, samples, or descriptions agreed upon in writing by both parties."
+    },
+    {
+      "id": "price_payment",
+      "title": "3. Purchase Price and Payment",
+      "content": "The total purchase price for the Goods is {{purchase_price}} (the \"Purchase Price\"). Payment shall be made by {{payment_method}} and is due on or before {{payment_due_date}}. Time of payment is of the essence."
+    },
+    {
+      "id": "delivery",
+      "title": "4. Delivery",
+      "content": "The Seller shall deliver the Goods to {{delivery_location}} by {{delivery_date}}. Risk of loss shall transfer to the Buyer upon delivery. The Buyer shall inspect the Goods upon delivery and notify the Seller of any defects or non-conformities within 5 business days."
+    },
+    {
+      "id": "title",
+      "title": "5. Title and Risk",
+      "content": "Title to the Goods shall pass from the Seller to the Buyer upon receipt of full payment of the Purchase Price. Until full payment is received, the Seller retains title to the Goods."
+    },
+    {
+      "id": "warranties",
+      "title": "6. Warranties",
+      "content": "The Seller warrants that: (a) the Seller has good title to the Goods and the right to sell them; (b) the Goods are free from any liens or encumbrances; (c) the Goods conform to the description in this Agreement. Except as stated herein, the Goods are sold \"AS IS\" without further warranty."
+    },
+    {
+      "id": "defects",
+      "title": "7. Defects and Returns",
+      "content": "If the Goods are found to be defective or non-conforming, the Buyer shall notify the Seller within 5 business days of delivery. The Seller shall, at its option, repair, replace, or refund the purchase price for the defective Goods. Returns must be made in the original condition and packaging."
+    },
+    {
+      "id": "force_majeure",
+      "title": "8. Force Majeure",
+      "content": "Neither party shall be liable for delays or failure to perform caused by circumstances beyond their reasonable control, including natural disasters, war, pandemics, or government actions. The affected party shall notify the other party promptly and shall resume performance as soon as practicable."
+    },
+    {
+      "id": "limitation_of_liability",
+      "title": "9. Limitation of Liability",
+      "content": "In no event shall either party be liable for indirect, incidental, consequential, or special damages. The total liability of either party shall not exceed the Purchase Price."
+    },
+    {
+      "id": "governing_law",
+      "title": "10. Governing Law",
+      "content": "This Agreement shall be governed by and construed in accordance with the laws of {{governing_law}}."
+    },
+    {
+      "id": "signatures",
+      "title": "Signatures",
+      "content": "IN WITNESS WHEREOF, the parties have executed this Sales Contract as of the date first written above.\n\n{{seller_name}} (Seller)\nSignature: _______________________\nName: ___________________________\nTitle: ___________________________\nDate: ____________________________\n\n{{buyer_name}} (Buyer)\nSignature: _______________________\nName: ___________________________\nTitle: ___________________________\nDate: ____________________________"
+    }
+  ]
+}

@@ -1,0 +1,71 @@
+{
+  "version": "1.0",
+  "last_updated": "2026-04-09",
+  "templates": [
+    {
+      "id": "nda",
+      "name": "Non-Disclosure Agreement (NDA)",
+      "category": "confidentiality",
+      "description": "A bilateral or unilateral agreement to protect confidential information shared between parties.",
+      "file": "nda.json"
+    },
+    {
+      "id": "employment_contract",
+      "name": "Employment Contract",
+      "category": "employment",
+      "description": "A standard employment agreement between an employer and a full-time or part-time employee.",
+      "file": "employment_contract.json"
+    },
+    {
+      "id": "service_agreement",
+      "name": "Service Agreement",
+      "category": "services",
+      "description": "A contract between a service provider and a client defining the scope, payment, and terms of services to be rendered.",
+      "file": "service_agreement.json"
+    },
+    {
+      "id": "freelance_contract",
+      "name": "Freelance / Independent Contractor Agreement",
+      "category": "services",
+      "description": "A contract for engaging a freelancer or independent contractor for a specific project or ongoing work.",
+      "file": "freelance_contract.json"
+    },
+    {
+      "id": "lease_agreement",
+      "name": "Residential Lease Agreement",
+      "category": "real_estate",
+      "description": "A standard rental agreement between a landlord and tenant for a residential property.",
+      "file": "lease_agreement.json"
+    },
+    {
+      "id": "partnership_agreement",
+      "name": "Business Partnership Agreement",
+      "category": "business",
+      "description": "A legal agreement establishing a business partnership, defining the roles, contributions, profit sharing, and responsibilities of each partner.",
+      "file": "partnership_agreement.json"
+    },
+    {
+      "id": "software_license",
+      "name": "Software License Agreement (EULA)",
+      "category": "technology",
+      "description": "An End User License Agreement governing the use of software by end users.",
+      "file": "software_license.json"
+    },
+    {
+      "id": "sales_contract",
+      "name": "Sales Contract / Purchase Agreement",
+      "category": "commercial",
+      "description": "A contract governing the sale and purchase of goods between a seller and a buyer.",
+      "file": "sales_contract.json"
+    }
+  ],
+  "categories": [
+    { "id": "confidentiality", "label": "Confidentiality" },
+    { "id": "employment", "label": "Employment" },
+    { "id": "services", "label": "Services & Consulting" },
+    { "id": "real_estate", "label": "Real Estate" },
+    { "id": "business", "label": "Business Formation" },
+    { "id": "technology", "label": "Technology & Software" },
+    { "id": "commercial", "label": "Commercial & Sales" }
+  ]
+}

@@ -1,0 +1,75 @@
+{
+  "id": "software_license",
+  "name": "Software License Agreement (EULA)",
+  "category": "technology",
+  "description": "An End User License Agreement governing the use of software by end users.",
+  "version": "1.0",
+  "variables": [
+    { "key": "licensor_name", "label": "Licensor / Company Name", "type": "text", "required": true },
+    { "key": "licensor_address", "label": "Licensor Address", "type": "text", "required": true },
+    { "key": "software_name", "label": "Software / Product Name", "type": "text", "required": true },
+    { "key": "software_version", "label": "Software Version", "type": "text", "required": false },
+    { "key": "effective_date", "label": "Effective Date", "type": "date", "required": true },
+    { "key": "license_type", "label": "License Type (e.g. Single-user, Enterprise)", "type": "text", "required": true, "default": "Single-user" },
+    { "key": "license_fee", "label": "License Fee", "type": "text", "required": false },
+    { "key": "license_duration", "label": "License Duration (e.g. Perpetual, Annual)", "type": "text", "required": true, "default": "Perpetual" },
+    { "key": "governing_law", "label": "Governing Law (State/Country)", "type": "text", "required": true }
+  ],
+  "sections": [
+    {
+      "id": "intro",
+      "title": "1. Agreement",
+      "content": "This End User License Agreement (\"Agreement\" or \"EULA\") is a legal agreement between you (\"Licensee\" or \"User\") and {{licensor_name}}, located at {{licensor_address}} (\"Licensor\"), for the use of {{software_name}} (the \"Software\"). By installing, copying, or otherwise using the Software, you agree to be bound by the terms of this Agreement."
+    },
+    {
+      "id": "grant",
+      "title": "2. License Grant",
+      "content": "Subject to the terms of this Agreement, the Licensor grants the Licensee a {{license_duration}}, non-exclusive, non-transferable, revocable license to install and use the Software for the Licensee's internal purposes. The license type is: {{license_type}}."
+    },
+    {
+      "id": "restrictions",
+      "title": "3. Restrictions",
+      "content": "The Licensee may not: (a) copy, modify, or distribute the Software except as expressly permitted; (b) reverse engineer, decompile, disassemble, or attempt to derive the source code of the Software; (c) sublicense, sell, rent, lease, or transfer the Software to any third party; (d) use the Software for any unlawful purpose; (e) remove any proprietary notices or labels on the Software."
+    },
+    {
+      "id": "ownership",
+      "title": "4. Intellectual Property Ownership",
+      "content": "The Software is licensed, not sold. The Licensor retains all right, title, and interest in and to the Software, including all intellectual property rights therein. This Agreement does not grant the Licensee any rights to the Licensor's trademarks, service marks, or logos."
+    },
+    {
+      "id": "updates",
+      "title": "5. Updates and Support",
+      "content": "The Licensor may, at its sole discretion, provide updates, patches, or new versions of the Software. Such updates may be subject to additional terms. Support services, if any, shall be provided under a separate support agreement."
+    },
+    {
+      "id": "privacy",
+      "title": "6. Data and Privacy",
+      "content": "The Licensor may collect certain usage data and telemetry information to improve the Software. Any such data collection shall be governed by the Licensor's Privacy Policy, which is incorporated herein by reference."
+    },
+    {
+      "id": "disclaimer",
+      "title": "7. Disclaimer of Warranties",
+      "content": "THE SOFTWARE IS PROVIDED \"AS IS\" WITHOUT WARRANTY OF ANY KIND. THE LICENSOR DISCLAIMS ALL WARRANTIES, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, AND NON-INFRINGEMENT."
+    },
+    {
+      "id": "limitation_of_liability",
+      "title": "8. Limitation of Liability",
+      "content": "TO THE MAXIMUM EXTENT PERMITTED BY LAW, THE LICENSOR SHALL NOT BE LIABLE FOR ANY INDIRECT, INCIDENTAL, SPECIAL, CONSEQUENTIAL, OR PUNITIVE DAMAGES ARISING OUT OF OR RELATED TO THIS AGREEMENT OR THE USE OF THE SOFTWARE. THE LICENSOR'S TOTAL LIABILITY SHALL NOT EXCEED THE AMOUNT PAID BY THE LICENSEE FOR THE SOFTWARE IN THE 12 MONTHS PRECEDING THE CLAIM."
+    },
+    {
+      "id": "termination",
+      "title": "9. Termination",
+      "content": "This Agreement is effective until terminated. It will terminate automatically if the Licensee fails to comply with any term of this Agreement. Upon termination, the Licensee must cease all use of the Software and destroy all copies in their possession."
+    },
+    {
+      "id": "governing_law",
+      "title": "10. Governing Law",
+      "content": "This Agreement shall be governed by and construed in accordance with the laws of {{governing_law}}."
+    },
+    {
+      "id": "entire_agreement",
+      "title": "11. Entire Agreement",
+      "content": "This Agreement constitutes the entire agreement between the parties with respect to the Software and supersedes all prior agreements, understandings, and representations."
+    }
+  ]
+}

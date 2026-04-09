@@ -1,0 +1,79 @@
+{
+  "id": "employment_contract",
+  "name": "Employment Contract",
+  "category": "employment",
+  "description": "A standard employment agreement between an employer and a full-time or part-time employee.",
+  "version": "1.0",
+  "variables": [
+    { "key": "employer_name", "label": "Employer / Company Name", "type": "text", "required": true },
+    { "key": "employer_address", "label": "Employer Address", "type": "text", "required": true },
+    { "key": "employee_name", "label": "Employee Full Name", "type": "text", "required": true },
+    { "key": "employee_address", "label": "Employee Address", "type": "text", "required": true },
+    { "key": "job_title", "label": "Job Title / Position", "type": "text", "required": true },
+    { "key": "start_date", "label": "Start Date", "type": "date", "required": true },
+    { "key": "salary", "label": "Annual Salary (amount and currency)", "type": "text", "required": true },
+    { "key": "pay_frequency", "label": "Pay Frequency (e.g. monthly, bi-weekly)", "type": "text", "required": true, "default": "monthly" },
+    { "key": "working_hours", "label": "Weekly Working Hours", "type": "number", "required": true, "default": 40 },
+    { "key": "probation_months", "label": "Probation Period (months)", "type": "number", "required": false, "default": 3 },
+    { "key": "notice_period", "label": "Notice Period (e.g. 1 month)", "type": "text", "required": true, "default": "1 month" },
+    { "key": "holiday_days", "label": "Annual Leave Days", "type": "number", "required": true, "default": 25 },
+    { "key": "governing_law", "label": "Governing Law (State/Country)", "type": "text", "required": true }
+  ],
+  "sections": [
+    {
+      "id": "parties",
+      "title": "1. Parties",
+      "content": "This Employment Contract (\"Agreement\") is entered into between {{employer_name}}, located at {{employer_address}} (the \"Employer\"), and {{employee_name}}, residing at {{employee_address}} (the \"Employee\"), effective as of {{start_date}}."
+    },
+    {
+      "id": "position",
+      "title": "2. Position and Duties",
+      "content": "The Employer agrees to employ the Employee in the position of {{job_title}}. The Employee agrees to perform all duties and responsibilities associated with this position and such other duties as may be reasonably assigned by the Employer from time to time. The Employee shall devote their full working time and attention to the performance of these duties."
+    },
+    {
+      "id": "hours",
+      "title": "3. Hours of Work",
+      "content": "The standard working week shall be {{working_hours}} hours. The Employer may require the Employee to work additional hours as necessary to meet business needs, subject to applicable law."
+    },
+    {
+      "id": "probation",
+      "title": "4. Probationary Period",
+      "content": "The first {{probation_months}} months of employment shall constitute a probationary period. During this time, either party may terminate this Agreement with one week's written notice. Successful completion of the probationary period will be confirmed in writing by the Employer."
+    },
+    {
+      "id": "remuneration",
+      "title": "5. Remuneration",
+      "content": "The Employee shall receive a salary of {{salary}}, payable {{pay_frequency}}, subject to applicable tax deductions and withholdings. The Employer shall review the Employee's salary periodically, but is not obligated to increase it."
+    },
+    {
+      "id": "leave",
+      "title": "6. Annual Leave",
+      "content": "The Employee is entitled to {{holiday_days}} days of paid annual leave per year (pro-rated for the first year of employment). Leave must be scheduled in advance and approved by the Employer. Unused leave may not be carried over beyond the limits set by applicable law."
+    },
+    {
+      "id": "confidentiality",
+      "title": "7. Confidentiality",
+      "content": "The Employee agrees to keep confidential all proprietary information, trade secrets, and other confidential information of the Employer, both during and after employment. This obligation continues indefinitely after termination of employment."
+    },
+    {
+      "id": "ip",
+      "title": "8. Intellectual Property",
+      "content": "Any work product, inventions, developments, or intellectual property created by the Employee in the course of their employment shall be the exclusive property of the Employer. The Employee hereby assigns all rights, title, and interest in such work product to the Employer."
+    },
+    {
+      "id": "termination",
+      "title": "9. Termination",
+      "content": "After the probationary period, either party may terminate this Agreement by providing {{notice_period}} written notice to the other party. The Employer may terminate this Agreement immediately and without notice in cases of gross misconduct, dishonesty, or material breach of this Agreement."
+    },
+    {
+      "id": "governing_law",
+      "title": "10. Governing Law",
+      "content": "This Agreement shall be governed by and construed in accordance with the laws of {{governing_law}}."
+    },
+    {
+      "id": "signatures",
+      "title": "Signatures",
+      "content": "Both parties agree to the terms and conditions set out in this Employment Contract.\n\n{{employer_name}}\nSignature: _______________________\nName: ___________________________\nTitle: ___________________________\nDate: ____________________________\n\n{{employee_name}} (Employee)\nSignature: _______________________\nDate: ____________________________"
+    }
+  ]
+}
