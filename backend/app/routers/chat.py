@@ -12,6 +12,10 @@ from app.models import ChatRequest, ChatResponse
 
 load_dotenv()
 
+# Disable SSL verification at import time for corporate TLS-intercepting proxies
+if os.environ.get("OPENROUTER_TLS_VERIFY", "").lower() == "false":
+    litellm.ssl_verify = False
+
 logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/chat", tags=["chat"])
 
@@ -67,9 +71,6 @@ def chat(body: ChatRequest):
     api_key = os.environ.get("OPENROUTER_API_KEY")
     if not api_key:
         raise HTTPException(status_code=500, detail="OPENROUTER_API_KEY not configured")
-
-    if os.environ.get("OPENROUTER_TLS_VERIFY", "").lower() == "false":
-        litellm.ssl_verify = False
 
     filled = {k: v for k, v in body.current_fields.items() if v and v.strip()}
     missing = [k for k in NDA_FIELDS if k not in filled]
