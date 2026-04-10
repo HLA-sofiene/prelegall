@@ -99,7 +99,7 @@ logs/
 *.sqlite3
 
 # Docker
-.dockerignore
+# .dockerignore is intentionally tracked
 
 # Secrets / credentials
 *.pem
