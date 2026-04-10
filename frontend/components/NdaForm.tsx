@@ -1,6 +1,7 @@
 'use client'
 
 import { mutualNdaTemplate } from '@/lib/mutualNdaTemplate'
+import type { NdaVariable } from '@/lib/mutualNdaTemplate'
 import type { FormValues } from '@/lib/renderTemplate'
 
 interface NdaFormProps {
@@ -8,7 +9,9 @@ interface NdaFormProps {
   onChange: (key: string, value: string) => void
 }
 
-const byKey = Object.fromEntries(mutualNdaTemplate.variables.map((v) => [v.key, v]))
+const byKey: Record<string, NdaVariable | undefined> = Object.fromEntries(
+  mutualNdaTemplate.variables.map((v) => [v.key, v])
+)
 
 const PARTY_A_KEYS = ['party_a_name', 'party_a_address'] as const
 const PARTY_B_KEYS = ['party_b_name', 'party_b_address'] as const
@@ -47,12 +50,13 @@ export default function NdaForm({ values, onChange }: NdaFormProps) {
 }
 
 interface FieldProps {
-  variable: (typeof mutualNdaTemplate.variables)[number]
+  variable: NdaVariable | undefined
   value: string
   onChange: (value: string) => void
 }
 
 function Field({ variable, value, onChange }: FieldProps) {
+  if (!variable) return null
   const inputClass =
     'mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 text-sm shadow-sm ' +
     'focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 ' +

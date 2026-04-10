@@ -13,11 +13,18 @@ function buildInitialValues(): FormValues {
   )
 }
 
+function getMissingLabels(values: FormValues): string[] {
+  return mutualNdaTemplate.variables
+    .filter((v) => v.required && (!values[v.key] || values[v.key].trim() === ''))
+    .map((v) => v.label)
+}
+
 export default function NdaCreator() {
   const [values, setValues] = useState<FormValues>(buildInitialValues)
+  const [validationError, setValidationError] = useState<string | null>(null)
   const previewRef = useRef<HTMLDivElement>(null)
 
-  const handlePrint = useReactToPrint({
+  const triggerPrint = useReactToPrint({
     contentRef: previewRef,
     documentTitle: 'Mutual_NDA',
     pageStyle: `
@@ -27,7 +34,18 @@ export default function NdaCreator() {
   })
 
   function handleChange(key: string, value: string) {
+    setValidationError(null)
     setValues((prev) => ({ ...prev, [key]: value }))
+  }
+
+  function handleDownload() {
+    const missing = getMissingLabels(values)
+    if (missing.length > 0) {
+      setValidationError(`Please fill in: ${missing.join(', ')}`)
+      return
+    }
+    setValidationError(null)
+    triggerPrint()
   }
 
   return (
@@ -46,15 +64,20 @@ export default function NdaCreator() {
       {/* Right panel — preview */}
       <main className="flex-1 flex flex-col overflow-hidden">
         {/* Preview toolbar */}
-        <div className="shrink-0 flex items-center justify-between border-b border-gray-200 bg-white px-6 py-3 shadow-sm">
-          <span className="text-sm font-medium text-gray-700">Live Preview</span>
-          <button
-            onClick={() => handlePrint()}
-            className="inline-flex items-center gap-2 rounded-md bg-indigo-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 active:bg-indigo-700 transition-colors"
-          >
-            <PrintIcon />
-            Download PDF
-          </button>
+        <div className="shrink-0 flex flex-col gap-2 border-b border-gray-200 bg-white px-6 py-3 shadow-sm">
+          <div className="flex items-center justify-between">
+            <span className="text-sm font-medium text-gray-700">Live Preview</span>
+            <button
+              onClick={handleDownload}
+              className="inline-flex items-center gap-2 rounded-md bg-indigo-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 active:bg-indigo-700 transition-colors"
+            >
+              <PrintIcon />
+              Download PDF
+            </button>
+          </div>
+          {validationError && (
+            <p className="text-xs text-red-600">{validationError}</p>
+          )}
         </div>
 
         {/* Scrollable preview area */}
