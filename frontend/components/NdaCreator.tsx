@@ -35,7 +35,10 @@ export default function NdaCreator() {
   })
 
   function handleFieldsUpdate(fields: Partial<FormValues>) {
-    setValues((prev) => ({ ...prev, ...fields }))
+    const defined = Object.fromEntries(
+      Object.entries(fields).filter((entry): entry is [string, string] => entry[1] !== undefined)
+    )
+    setValues((prev) => ({ ...prev, ...defined }))
   }
 
   const missing = useMemo(() => getMissingLabels(values), [values])
