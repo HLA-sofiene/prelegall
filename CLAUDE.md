@@ -30,7 +30,7 @@ The entire project should be packaged into a Docker container.
 The backend should be in backend/ and be a uv project, using FastAPI.  
 The frontend should be in frontend/  
 The database should use SQLLite and be created from scratch each time the Docker container is brought up, allowing for a users table with sign up and sign in.  
-Consider statically building the frontend and serving it via FastAPI, if that will work.  
+The frontend is statically built (`output: "export"`) and served by FastAPI from `backend/frontend_static/`.  
 There should be scripts in scripts/ for:  
 ```bash
 # Mac
@@ -64,7 +64,7 @@ Backend available at http://localhost:8000
 - Start/stop scripts for Mac, Linux, Windows
 - Mutual NDA form with live preview and PDF download
 
-### Completed (PL-5)
+### Planned (PL-5)
 - AI chat interface replaces manual form for NDA creation
 - Uses LiteLLM via OpenRouter with Cerebras inference (gpt-oss-120b model)
 - Structured outputs for reliable field extraction from conversation
@@ -72,7 +72,7 @@ Backend available at http://localhost:8000
 - AI greets user, asks questions conversationally, and confirms when complete
 - Download button appears when all required fields are gathered
 
-### Completed (PL-6)
+### Planned (PL-6)
 - Support for all 11 document types from catalog.json
 - AI detects document type from user requests and routes accordingly
 - Dedicated preview/PDF components for Mutual NDA, Cloud Service Agreement, Pilot Agreement
@@ -80,7 +80,7 @@ Backend available at http://localhost:8000
 - Auto-focus chat input after sending messages
 - AI always asks follow-on questions when more information is needed
 
-### Completed (PL-7)
+### Planned (PL-7)
 - Functional user authentication with JWT tokens in HttpOnly cookies
 - User signup and signin with email/password (bcrypt password hashing)
 - Document persistence - users can save documents to their account
@@ -90,16 +90,16 @@ Backend available at http://localhost:8000
 - Auth context for managing user state across the app
 - Protected document save/load endpoints
 
-### Current API Endpoints
+### Current API Endpoints (live)
 - `POST /api/auth/signup` - Create new user account
 - `POST /api/auth/signin` - Sign in and receive JWT cookie
 - `POST /api/auth/signout` - Clear auth cookie
 - `GET /api/auth/me` - Get current user info
-- `GET /api/documents` - List user's saved documents (auth required)
-- `POST /api/documents` - Save new document (auth required)
-- `GET /api/documents/{id}` - Get specific document (auth required)
-- `PUT /api/documents/{id}` - Update document (auth required)
-- `DELETE /api/documents/{id}` - Delete document (auth required)
-- `GET /api/chat/greeting` - Get AI greeting
-- `POST /api/chat/message` - Send chat message and get AI response
 - `GET /api/health` - Health check
+
+## Docker / Corporate Network Notes
+The build works on corporate networks with TLS-intercepting proxies:
+- Python packages: installed via `pip --trusted-host` (see `backend/requirements.txt`)
+- npm packages: `npm config set strict-ssl false` before `npm ci`
+- Google Fonts: replaced with the `geist` npm package (`next/font/local`) — no external font downloads at build time
+- A `.dockerignore` excludes `frontend/node_modules` so the Linux build isn't overwritten by Windows binaries
