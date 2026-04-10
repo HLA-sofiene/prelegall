@@ -2,7 +2,8 @@
 FROM node:20-alpine AS frontend-builder
 WORKDIR /app
 COPY frontend/package.json frontend/package-lock.json ./
-RUN npm ci
+# Disable strict SSL for npm on corporate networks with TLS-intercepting proxies
+RUN npm config set strict-ssl false && npm ci
 COPY frontend/ ./
 RUN npm run build
 
@@ -13,6 +14,10 @@ WORKDIR /app
 
 # Install uv
 COPY --from=ghcr.io/astral-sh/uv:latest /uv /usr/local/bin/uv
+
+# Use native TLS so uv trusts the system CA store (required on corporate networks
+# that use a TLS-intercepting proxy)
+ENV UV_NATIVE_TLS=1
 
 # Install backend dependencies (leverages layer cache when pyproject.toml unchanged)
 COPY backend/pyproject.toml backend/uv.lock* ./backend/
