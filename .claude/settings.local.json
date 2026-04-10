@@ -1,0 +1,17 @@
+{
+  "permissions": {
+    "allow": [
+      "mcp__atlassian__getJiraIssue",
+      "Bash(gh pr create --title 'PL-2: Add legal document templates dataset' --body ':*)",
+      "mcp__github__create_pull_request",
+      "mcp__atlassian__getTransitionsForJiraIssue",
+      "mcp__atlassian__transitionJiraIssue",
+      "mcp__github__merge_pull_request",
+      "mcp__atlassian__getAccessibleAtlassianResources",
+      "Bash(npx create-next-app@latest frontend --typescript --tailwind --eslint --app --no-src-dir --import-alias \"@/*\" --yes)",
+      "Bash(npm install:*)",
+      "Bash(npm run:*)",
+      "Bash(gh pr create --title 'feat\\(PL-3\\): Mutual NDA Creator — Next.js frontend prototype' --body ':*)"
+    ]
+  }
+}
