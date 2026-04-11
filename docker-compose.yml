@@ -6,3 +6,5 @@ services:
     environment:
       - SECRET_KEY=${SECRET_KEY:-change-me-in-production}
       - DB_PATH=/tmp/prelegall.db
+      - OPENROUTER_API_KEY=${OPENROUTER_API_KEY}
+      - OPENROUTER_TLS_VERIFY=${OPENROUTER_TLS_VERIFY:-true}
