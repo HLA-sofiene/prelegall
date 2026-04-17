@@ -8,7 +8,7 @@ The available documents are covered in the catalog.json file in the project root
 
 @catalog.json
 
-The current implementation supports Mutual NDA creation via AI chat. Support for all 11 document types, user authentication, and document persistence are planned in upcoming sprints.
+The current implementation supports all 11 document types via AI chat with document-type detection and routing. Users can sign up, sign in, save documents to their account, and reload them later.
 
 ## Development process
 
@@ -72,23 +72,29 @@ Backend available at http://localhost:8000
 - AI greets user, asks questions conversationally, and confirms when complete
 - Download button appears when all required fields are gathered
 
-### Planned (PL-6)
+### Completed (PL-6)
 - Support for all 11 document types from catalog.json
 - AI detects document type from user requests and routes accordingly
+- Document registry (`frontend/lib/documentRegistry.ts`) maps catalog entries to field schemas
 - Dedicated preview/PDF components for Mutual NDA, Cloud Service Agreement, Pilot Agreement
-- Generic preview/PDF components for remaining document types (Design Partner, SLA, Professional Services, Partnership, Software License, DPA, BAA, AI Addendum)
+- Generic preview/PDF component for remaining 8 types (Design Partner, SLA, Professional Services, Partnership, Software License, DPA, BAA, AI Addendum)
+- `DocumentCreator` orchestrator and `DocChat` AI chat panel components
+- Shared `SignatureSection` component
 - Auto-focus chat input after sending messages
 - AI always asks follow-on questions when more information is needed
 
-### Planned (PL-7)
+### Completed (PL-7)
 - Functional user authentication with JWT tokens in HttpOnly cookies
 - User signup and signin with email/password (bcrypt password hashing)
-- Document persistence - users can save documents to their account
-- My Documents modal to view, load, and delete saved documents
-- User menu with sign out functionality
-- New Document button to start fresh
-- Auth context for managing user state across the app
-- Protected document save/load endpoints
+- `AuthContext` provider bootstrapped from `GET /api/auth/me` on mount
+- `AuthModal` component — combined sign-in/sign-up with tab switcher
+- `UserMenu` dropdown — shows email, My Documents, Sign Out when authenticated; Sign In button when not
+- Document persistence — users can save completed documents to their account (auto-named by type + date)
+- `documents` SQLite table with user FK, doc_type, fields (JSON), and timestamps
+- Protected CRUD endpoints: save, list, get, delete documents
+- `MyDocumentsModal` — lists saved documents; click to load (restores doc type + fields), delete button per row
+- New Document button in preview toolbar to reset the current session
+- Save button appears alongside Download PDF when a document is complete
 
 ### Current API Endpoints (live)
 - `POST /api/auth/signup` - Create new user account
@@ -96,7 +102,11 @@ Backend available at http://localhost:8000
 - `POST /api/auth/signout` - Clear auth cookie
 - `GET /api/auth/me` - Get current user info
 - `GET /api/health` - Health check
-- `POST /api/chat` - AI chat for NDA field extraction (LiteLLM/OpenRouter/Cerebras)
+- `POST /api/chat` - AI chat for all document types — detects type, extracts fields via structured outputs (LiteLLM/OpenRouter/Cerebras)
+- `POST /api/documents` - Save a document (auth required)
+- `GET /api/documents` - List current user's documents (auth required)
+- `GET /api/documents/{id}` - Get a single document (auth required, owner only)
+- `DELETE /api/documents/{id}` - Delete a document (auth required, owner only)
 
 ## Docker / Corporate Network Notes
 The build works on corporate networks with TLS-intercepting proxies:
