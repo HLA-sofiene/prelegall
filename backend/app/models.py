@@ -33,3 +33,18 @@ class ChatResponse(BaseModel):
     message: str
     fields: dict[str, str]
     doc_type: str | None = None
+
+
+class DocumentSaveRequest(BaseModel):
+    name: str = Field(max_length=200)
+    doc_type: str = Field(max_length=100)
+    fields: dict[str, str]
+
+
+class DocumentResponse(BaseModel):
+    id: int
+    name: str
+    doc_type: str
+    fields: dict[str, str]
+    created_at: str
+    updated_at: str
