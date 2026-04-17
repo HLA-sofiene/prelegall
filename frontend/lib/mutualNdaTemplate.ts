@@ -1,25 +1,11 @@
-export interface NdaVariable {
-  key: string
-  label: string
-  type: 'text' | 'date' | 'number'
-  required: boolean
-  default?: string | number
-}
+import type { DocTemplate, DocVariable, DocSection } from './renderTemplate'
 
-export interface NdaSection {
-  id: string
-  title: string
-  content: string
-}
+// Legacy type aliases kept for backward compatibility
+export type NdaVariable = DocVariable
+export type NdaSection = DocSection
+export type MutualNdaTemplate = DocTemplate
 
-export interface MutualNdaTemplate {
-  id: string
-  name: string
-  variables: NdaVariable[]
-  sections: NdaSection[]
-}
-
-export const mutualNdaTemplate: MutualNdaTemplate = {
+export const mutualNdaTemplate: DocTemplate = {
   id: 'mutual_nda',
   name: 'Mutual Non-Disclosure Agreement',
   variables: [

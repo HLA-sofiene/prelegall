@@ -8,7 +8,7 @@ The available documents are covered in the catalog.json file in the project root
 
 @catalog.json
 
-The current implementation supports all 11 document types via AI chat with full user authentication and document persistence.
+The current implementation supports Mutual NDA creation via AI chat. Support for all 11 document types, user authentication, and document persistence are planned in upcoming sprints.
 
 ## Development process
 
@@ -64,7 +64,7 @@ Backend available at http://localhost:8000
 - Start/stop scripts for Mac, Linux, Windows
 - Mutual NDA form with live preview and PDF download
 
-### Planned (PL-5)
+### Completed (PL-5)
 - AI chat interface replaces manual form for NDA creation
 - Uses LiteLLM via OpenRouter with Cerebras inference (gpt-oss-120b model)
 - Structured outputs for reliable field extraction from conversation
@@ -96,6 +96,7 @@ Backend available at http://localhost:8000
 - `POST /api/auth/signout` - Clear auth cookie
 - `GET /api/auth/me` - Get current user info
 - `GET /api/health` - Health check
+- `POST /api/chat` - AI chat for NDA field extraction (LiteLLM/OpenRouter/Cerebras)
 
 ## Docker / Corporate Network Notes
 The build works on corporate networks with TLS-intercepting proxies:

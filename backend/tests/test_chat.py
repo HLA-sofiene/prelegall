@@ -10,24 +10,37 @@ from app.main import app
 
 client = TestClient(app)
 
-# Mock path changed to litellm.completion since chat.py uses litellm.completion(...)
 _COMPLETION = "app.routers.chat.litellm.completion"
 
 
-def _mock_litellm_response(message: str, **fields) -> MagicMock:
-    """Build a mock litellm response with the given message and optional NDA fields."""
+def _mock_detection_response(message: str, detected_doc_type: str | None = None) -> MagicMock:
+    """Build a mock litellm response for the detection phase."""
+    payload = {"message": message}
+    if detected_doc_type is not None:
+        payload["detected_doc_type"] = detected_doc_type
+    mock = MagicMock()
+    mock.choices[0].message.content = json.dumps(payload)
+    return mock
+
+
+def _mock_fields_response(message: str, **fields) -> MagicMock:
+    """Build a mock litellm response for the field-gathering phase."""
     payload = {"message": message, **{k: v for k, v in fields.items() if v is not None}}
     mock = MagicMock()
     mock.choices[0].message.content = json.dumps(payload)
     return mock
 
 
+# ---------------------------------------------------------------------------
+# Detection phase tests (no doc_type in request)
+# ---------------------------------------------------------------------------
+
 @patch.dict("os.environ", {"OPENROUTER_API_KEY": "test-key"})
 @patch(_COMPLETION)
-def test_chat_greeting(mock_completion):
-    """Initial call with no messages returns a greeting and no fields."""
-    mock_completion.return_value = _mock_litellm_response(
-        "Hello! I'll help you draft a Mutual NDA. Could you tell me the full legal name of Party A?"
+def test_chat_greeting_detection_phase(mock_completion):
+    """Initial call with no messages and no doc_type returns a greeting, no fields."""
+    mock_completion.return_value = _mock_detection_response(
+        "Hi! I can help you draft legal agreements. What type of document do you need?"
     )
 
     res = client.post("/api/chat", json={"messages": [], "current_fields": {}})
@@ -38,13 +51,41 @@ def test_chat_greeting(mock_completion):
     assert isinstance(data["message"], str)
     assert len(data["message"]) > 0
     assert data["fields"] == {}
+    assert data["doc_type"] is None
 
 
 @patch.dict("os.environ", {"OPENROUTER_API_KEY": "test-key"})
 @patch(_COMPLETION)
-def test_chat_extracts_fields(mock_completion):
-    """AI response with field values are returned in the fields dict."""
-    mock_completion.return_value = _mock_litellm_response(
+def test_chat_detection_returns_doc_type(mock_completion):
+    """When the AI identifies a document type, it is returned in doc_type."""
+    mock_completion.return_value = _mock_detection_response(
+        "Great, I'll help you draft a Cloud Service Agreement!",
+        detected_doc_type="cloud_service_agreement",
+    )
+
+    res = client.post(
+        "/api/chat",
+        json={
+            "messages": [{"role": "user", "content": "I need a cloud service agreement"}],
+            "current_fields": {},
+        },
+    )
+
+    assert res.status_code == 200
+    data = res.json()
+    assert data["doc_type"] == "cloud_service_agreement"
+    assert data["fields"] == {}
+
+
+# ---------------------------------------------------------------------------
+# Field-gathering phase tests (doc_type in request)
+# ---------------------------------------------------------------------------
+
+@patch.dict("os.environ", {"OPENROUTER_API_KEY": "test-key"})
+@patch(_COMPLETION)
+def test_chat_nda_extracts_fields(mock_completion):
+    """AI response with NDA field values are returned in the fields dict."""
+    mock_completion.return_value = _mock_fields_response(
         "Got it! Acme Corp is Party A. What is their address?",
         party_a_name="Acme Corp",
     )
@@ -54,19 +95,21 @@ def test_chat_extracts_fields(mock_completion):
         json={
             "messages": [{"role": "user", "content": "Party A is Acme Corp"}],
             "current_fields": {},
+            "doc_type": "mutual_nda",
         },
     )
 
     assert res.status_code == 200
     data = res.json()
     assert data["fields"].get("party_a_name") == "Acme Corp"
+    assert data["doc_type"] == "mutual_nda"
 
 
 @patch.dict("os.environ", {"OPENROUTER_API_KEY": "test-key"})
 @patch(_COMPLETION)
 def test_chat_partial_extraction(mock_completion):
     """Only fields present in the AI response are returned."""
-    mock_completion.return_value = _mock_litellm_response(
+    mock_completion.return_value = _mock_fields_response(
         "Great, I have both parties. What is the purpose of this NDA?",
         party_a_name="Acme Corp",
         party_a_address="123 Main St, San Francisco, CA",
@@ -83,6 +126,7 @@ def test_chat_partial_extraction(mock_completion):
                 "party_a_address": "123 Main St, San Francisco, CA",
                 "party_b_name": "Beta LLC",
             },
+            "doc_type": "mutual_nda",
         },
     )
 
@@ -92,6 +136,48 @@ def test_chat_partial_extraction(mock_completion):
     assert "effective_date" not in data["fields"]
     assert "purpose" not in data["fields"]
 
+
+@patch.dict("os.environ", {"OPENROUTER_API_KEY": "test-key"})
+@patch(_COMPLETION)
+def test_chat_csa_extracts_fields(mock_completion):
+    """CSA field extraction works with doc_type=cloud_service_agreement."""
+    mock_completion.return_value = _mock_fields_response(
+        "Got it! Acme Cloud Inc is the provider. What is their address?",
+        provider_name="Acme Cloud Inc",
+    )
+
+    res = client.post(
+        "/api/chat",
+        json={
+            "messages": [{"role": "user", "content": "The provider is Acme Cloud Inc"}],
+            "current_fields": {},
+            "doc_type": "cloud_service_agreement",
+        },
+    )
+
+    assert res.status_code == 200
+    data = res.json()
+    assert data["fields"].get("provider_name") == "Acme Cloud Inc"
+    assert data["doc_type"] == "cloud_service_agreement"
+
+
+@patch.dict("os.environ", {"OPENROUTER_API_KEY": "test-key"})
+def test_chat_unknown_doc_type():
+    """Returns 400 for an unrecognised doc_type."""
+    res = client.post(
+        "/api/chat",
+        json={
+            "messages": [],
+            "current_fields": {},
+            "doc_type": "not_a_real_document_type",
+        },
+    )
+    assert res.status_code == 400
+
+
+# ---------------------------------------------------------------------------
+# Error handling tests
+# ---------------------------------------------------------------------------
 
 def test_chat_missing_api_key():
     """Returns 500 when OPENROUTER_API_KEY is not set."""
@@ -120,14 +206,17 @@ def test_chat_ai_service_error(mock_completion):
 @patch(_COMPLETION)
 def test_chat_passes_conversation_history(mock_completion):
     """All messages from the request are forwarded to LiteLLM."""
-    mock_completion.return_value = _mock_litellm_response("Got it!")
+    mock_completion.return_value = _mock_fields_response("Got it!")
 
     messages = [
         {"role": "user", "content": "Hi"},
         {"role": "assistant", "content": "Hello! I can help."},
         {"role": "user", "content": "Party A is Acme Corp"},
     ]
-    client.post("/api/chat", json={"messages": messages, "current_fields": {}})
+    client.post(
+        "/api/chat",
+        json={"messages": messages, "current_fields": {}, "doc_type": "mutual_nda"},
+    )
 
     call_messages = mock_completion.call_args[1]["messages"]
     assert call_messages[0]["role"] == "system"
@@ -137,6 +226,10 @@ def test_chat_passes_conversation_history(mock_completion):
         assert sent["role"] == expected["role"]
         assert sent["content"] == expected["content"]
 
+
+# ---------------------------------------------------------------------------
+# Validation tests
+# ---------------------------------------------------------------------------
 
 def test_chat_rejects_invalid_role():
     """Requests with an invalid role (e.g. 'system') are rejected with 422."""
