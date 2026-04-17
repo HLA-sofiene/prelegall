@@ -7,6 +7,10 @@ import NdaPreview from './NdaPreview'
 import CloudServiceAgreementPreview from './CloudServiceAgreementPreview'
 import PilotAgreementPreview from './PilotAgreementPreview'
 import GenericDocPreview from './GenericDocPreview'
+import AuthModal from './AuthModal'
+import UserMenu from './UserMenu'
+import MyDocumentsModal from './MyDocumentsModal'
+import { useAuth } from '@/context/AuthContext'
 import type { FormValues } from '@/lib/renderTemplate'
 import { documentRegistry } from '@/lib/documentRegistry'
 
@@ -35,9 +39,21 @@ function getTotalRequired(docType: string | null): number {
   return template.variables.filter((v) => v.required).length
 }
 
+function autoDocName(docType: string): string {
+  const label = documentRegistry[docType]?.name ?? docType.replace(/_/g, ' ')
+  const date = new Date().toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })
+  return `${label} — ${date}`
+}
+
 export default function DocumentCreator() {
+  const { user } = useAuth()
   const [docType, setDocType] = useState<string | null>(null)
   const [values, setValues] = useState<FormValues>({})
+  const [showAuthModal, setShowAuthModal] = useState(false)
+  const [showMyDocs, setShowMyDocs] = useState(false)
+  const [isSaving, setIsSaving] = useState(false)
+  const [saveError, setSaveError] = useState<string | null>(null)
+  const [savedConfirm, setSavedConfirm] = useState(false)
   const previewRef = useRef<HTMLDivElement>(null)
 
   const docName = docType ? (documentRegistry[docType]?.name ?? 'Document') : null
@@ -53,7 +69,6 @@ export default function DocumentCreator() {
 
   function handleDocTypeDetected(type: string) {
     setDocType(type)
-    // Initialise values from the detected template's defaults
     setValues(buildInitialValues(type))
   }
 
@@ -62,6 +77,46 @@ export default function DocumentCreator() {
       Object.entries(fields).filter((entry): entry is [string, string] => entry[1] !== undefined)
     )
     setValues((prev) => ({ ...prev, ...defined }))
+  }
+
+  function handleNewDocument() {
+    setDocType(null)
+    setValues({})
+    setSaveError(null)
+    setSavedConfirm(false)
+  }
+
+  function handleLoadDocument(loadedDocType: string, loadedFields: FormValues) {
+    setDocType(loadedDocType)
+    setValues({ ...buildInitialValues(loadedDocType), ...loadedFields })
+    setSaveError(null)
+    setSavedConfirm(false)
+  }
+
+  async function handleSave() {
+    if (!user) { setShowAuthModal(true); return }
+    if (!docType) return
+    setSaveError(null)
+    setIsSaving(true)
+    try {
+      const res = await fetch('/api/documents', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify({
+          name: autoDocName(docType),
+          doc_type: docType,
+          fields: values,
+        }),
+      })
+      if (!res.ok) throw new Error('Save failed')
+      setSavedConfirm(true)
+      setTimeout(() => setSavedConfirm(false), 3000)
+    } catch {
+      setSaveError('Could not save document. Please try again.')
+    } finally {
+      setIsSaving(false)
+    }
   }
 
   const missingCount = useMemo(() => getMissingCount(values, docType), [values, docType])
@@ -73,13 +128,19 @@ export default function DocumentCreator() {
     <div className="flex h-screen overflow-hidden bg-gray-100">
       {/* Left panel — AI chat */}
       <aside className="w-96 shrink-0 flex flex-col border-r border-gray-200 bg-white shadow-sm overflow-hidden">
-        <div className="shrink-0 border-b border-gray-200 px-6 py-4">
-          <h1 className="text-base font-bold" style={{ color: '#032147' }}>
-            {docName ? `${docName} Creator` : 'Legal Document Creator'}
-          </h1>
-          <p className="text-xs mt-0.5" style={{ color: '#888888' }}>
-            {docName ? 'Chat with AI to draft your agreement' : 'Tell the AI what document you need'}
-          </p>
+        <div className="shrink-0 border-b border-gray-200 px-4 py-3 flex items-center justify-between gap-2">
+          <div className="min-w-0">
+            <h1 className="text-base font-bold truncate" style={{ color: '#032147' }}>
+              {docName ? `${docName} Creator` : 'Legal Document Creator'}
+            </h1>
+            <p className="text-xs mt-0.5" style={{ color: '#888888' }}>
+              {docName ? 'Chat with AI to draft your agreement' : 'Tell the AI what document you need'}
+            </p>
+          </div>
+          <UserMenu
+            onSignInClick={() => setShowAuthModal(true)}
+            onMyDocumentsClick={() => setShowMyDocs(true)}
+          />
         </div>
         <div className="flex-1 overflow-hidden px-4 py-4">
           <DocChat
@@ -95,7 +156,7 @@ export default function DocumentCreator() {
       {/* Right panel — preview */}
       <main className="flex-1 flex flex-col overflow-hidden">
         {/* Preview toolbar */}
-        <div className="shrink-0 flex items-center justify-between border-b border-gray-200 bg-white px-6 py-3 shadow-sm">
+        <div className="shrink-0 flex items-center justify-between border-b border-gray-200 bg-white px-6 py-3 shadow-sm gap-3">
           <div className="flex items-center gap-3">
             <span className="text-sm font-medium text-gray-700">Live Preview</span>
             {docType && !isComplete && (
@@ -104,17 +165,45 @@ export default function DocumentCreator() {
               </span>
             )}
           </div>
-          {isComplete && (
-            <button
-              onClick={() => triggerPrint()}
-              className="inline-flex items-center gap-2 rounded-md px-4 py-2 text-sm font-semibold text-white shadow-sm transition-colors"
-              style={{ backgroundColor: '#753991' }}
-            >
-              <PrintIcon />
-              Download PDF
-            </button>
-          )}
+          <div className="flex items-center gap-2">
+            {docType && (
+              <button
+                onClick={handleNewDocument}
+                className="inline-flex items-center gap-1.5 rounded-md border border-gray-300 bg-white px-3 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 transition-colors"
+              >
+                <PlusIcon />
+                New Document
+              </button>
+            )}
+            {isComplete && (
+              <>
+                <button
+                  onClick={handleSave}
+                  disabled={isSaving}
+                  className="inline-flex items-center gap-2 rounded-md px-4 py-2 text-sm font-semibold text-white shadow-sm transition-colors disabled:opacity-50"
+                  style={{ backgroundColor: savedConfirm ? '#16a34a' : '#209dd7' }}
+                >
+                  {savedConfirm ? <CheckIcon /> : <SaveIcon />}
+                  {savedConfirm ? 'Saved!' : isSaving ? 'Saving…' : 'Save'}
+                </button>
+                <button
+                  onClick={() => triggerPrint()}
+                  className="inline-flex items-center gap-2 rounded-md px-4 py-2 text-sm font-semibold text-white shadow-sm transition-colors"
+                  style={{ backgroundColor: '#753991' }}
+                >
+                  <PrintIcon />
+                  Download PDF
+                </button>
+              </>
+            )}
+          </div>
         </div>
+
+        {saveError && (
+          <div className="bg-red-50 border-b border-red-200 px-6 py-2">
+            <p className="text-xs text-red-600">{saveError}</p>
+          </div>
+        )}
 
         {/* Scrollable preview area */}
         <div className="flex-1 overflow-y-auto p-6">
@@ -127,6 +216,15 @@ export default function DocumentCreator() {
           )}
         </div>
       </main>
+
+      {/* Modals */}
+      {showAuthModal && <AuthModal onClose={() => setShowAuthModal(false)} />}
+      {showMyDocs && (
+        <MyDocumentsModal
+          onClose={() => setShowMyDocs(false)}
+          onLoad={handleLoadDocument}
+        />
+      )}
     </div>
   )
 }
@@ -182,17 +280,8 @@ function EmptyPreview() {
 
 function DocumentIcon() {
   return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      width="28"
-      height="28"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="#209dd7"
-      strokeWidth="1.5"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
+    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24"
+      fill="none" stroke="#209dd7" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
       <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
       <polyline points="14 2 14 8 20 8" />
       <line x1="16" y1="13" x2="8" y2="13" />
@@ -204,20 +293,40 @@ function DocumentIcon() {
 
 function PrintIcon() {
   return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      width="16"
-      height="16"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
+    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+      fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
       <polyline points="6 9 6 2 18 2 18 9" />
       <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2" />
       <rect x="6" y="14" width="12" height="8" />
+    </svg>
+  )
+}
+
+function SaveIcon() {
+  return (
+    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+      fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z" />
+      <polyline points="17 21 17 13 7 13 7 21" />
+      <polyline points="7 3 7 8 15 8" />
+    </svg>
+  )
+}
+
+function CheckIcon() {
+  return (
+    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+      fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+      <polyline points="20 6 9 17 4 12" />
+    </svg>
+  )
+}
+
+function PlusIcon() {
+  return (
+    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24"
+      fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <line x1="12" y1="5" x2="12" y2="19" /><line x1="5" y1="12" x2="19" y2="12" />
     </svg>
   )
 }
