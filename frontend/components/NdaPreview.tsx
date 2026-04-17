@@ -4,6 +4,7 @@ import { forwardRef } from 'react'
 import { mutualNdaTemplate } from '@/lib/mutualNdaTemplate'
 import { renderSection } from '@/lib/renderTemplate'
 import type { FormValues } from '@/lib/renderTemplate'
+import SignatureSection from './SignatureSection'
 
 interface NdaPreviewProps {
   values: FormValues
@@ -57,28 +58,3 @@ const NdaPreview = forwardRef<HTMLDivElement, NdaPreviewProps>(({ values }, ref)
 NdaPreview.displayName = 'NdaPreview'
 
 export default NdaPreview
-
-function SignatureSection({ title, content }: { title: string; content: string }) {
-  const blocks = content.split('\n\n').filter(Boolean)
-
-  return (
-    <div className="mt-8">
-      <p className="font-semibold mb-4">{title}</p>
-      <p className="mb-6 text-justify">{blocks[0]}</p>
-      <div className="grid grid-cols-2 gap-10">
-        {blocks.slice(1).map((block, i) => {
-          const lines = block.split('\n').filter(Boolean)
-          return (
-            <div key={i} className="space-y-2">
-              {lines.map((line, j) => (
-                <p key={j} className="text-sm border-b border-gray-400 pb-1">
-                  {line}
-                </p>
-              ))}
-            </div>
-          )
-        })}
-      </div>
-    </div>
-  )
-}

@@ -26,8 +26,10 @@ class ChatMessage(BaseModel):
 class ChatRequest(BaseModel):
     messages: Annotated[list[ChatMessage], Field(max_length=50)] = []
     current_fields: dict[str, str] = {}
+    doc_type: str | None = None
 
 
 class ChatResponse(BaseModel):
     message: str
     fields: dict[str, str]
+    doc_type: str | None = None
